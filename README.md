@@ -1,0 +1,2 @@
+# AOAI-app-environment
+Azure OpenAI サービスを使用するアプリケーションをサービスとしてホストするための環境を構築するハンズオンです
