@@ -88,3 +88,52 @@ MCP AZ-900 の内容については以下をご覧ください。
   * [**Git ツール**](https://git-scm.com/downloads)
   
     (※) GitHub リポジトリから zip 形式でのダウンロードの方法をご存じの場合は、Git ツールがなくても一部の演習をスキップしてハンズオンを実施することができます。
+
+## 事前準備
+
+1. Azure リソースの作成
+2. Azure OpenAI リソースへの AI モデルのデプロイ
+3. Azure AI Search のインデックス作成
+4. 演習用アプリケーションの GitHub リポジトリの作成とクローン
+5. 演習用アプリケーションのローカルでの動作確認
+6. GitHub リポジトリからの演習用アプリケーションの Azure App Service へのデプロイ
+
+<br>
+
+## 演習
+
+1. アプリケーションをホストするための基本的な設定
+    1. 構成情報の確認
+    2. ログの有効化
+    3. バックアップの設定
+    4. デプロイ スロットの作成
+    5. 可用性設定
+       1. 可用性ゾーンの設定
+       2. スケールアップ
+       3. スケールアウト
+       4. 自動スケーリング
+    6. 高度なログ監視
+       1. メトリック アラートの設定
+       2. Log Analytics を使用したログの分析
+       3. Application Insights 使用したアプリケーションの監視
+ 2. セキュリティと Azure サービス間の認証設定
+    1. App Service 自動認証
+    2. Key Vault へのキーの登録と利用
+    3. マネージド ID によるサービス間認証
+ 3. サービスの閉域化
+    1. Jump Box の構築
+       1. 仮想ネットワークの構築
+       2. 仮想マシンの作成
+       3. Bastion の構築
+    2. プライベートエンドポイントの作成
+       1. App Service のプライベート エンドポイントの作成
+       2. Azure AI Search のプライベート エンドポイントの作成
+       3. Azure OpenAI サービスのプライベート エンドポイントの作成
+          - 仮想ネットワークピアリングの設定
+    3. 閉域化された App Service へのアプリケーションのデプロイ
+       - GitHub Selfhosted Runner のインストールと設定
+    4. Application Gateway を介した Web アプリケーションの公開
+       1. Application Gateway の作成
+       2. Application Gateway の設定
+       3. Application Gateway を介した Web アプリケーションの公開
+2. 
