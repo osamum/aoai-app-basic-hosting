@@ -13,8 +13,12 @@
 
 <br>
 
----
-
-🏚️　[**README に戻る**](README.md)
+## 次へ
 
 👉　[準備 1: Azure リソースの作成](prep01.md)
+
+---
+
+🏚️　[README に戻る](README.md)
+
+

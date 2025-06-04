@@ -50,7 +50,7 @@ resource searchService 'Microsoft.Search/searchServices@2020-08-01' = {
 
 // Storage Account（小文字・ハイフンなし制限）
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: toLower('storage${uniqueSuffix}')
+  name: 'storage-${uniqueSuffix}'
   location: location
   sku: {
     name: 'Standard_LRS'
@@ -61,7 +61,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
 
 // Azure OpenAI アカウント
 resource aoai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
-  name: 'aoai--${uniqueSuffix}'
+  name: 'aoai-${uniqueSuffix}'
   location: aoaiLocation
   sku: {
     name: 'S0'

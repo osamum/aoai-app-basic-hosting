@@ -6,14 +6,14 @@
 
 なお、リソースの作成先のリージョンは Azure OpenAI Service だけが `Australia East` で、他のリソースは `Japan East` となるので手動で作成する場合は注意してください。
 
-* リソースグループ
+* **リソースグループ**
     | 項目 | 値 |
     |----|---|
     | リソースグループ名 | `AOAI-AppEnv-handson` |
     | リージョン | `Japan East` |
 
 
-* Azure App Service
+* **Azure App Service**
     | 項目 | 値 |
     |----|----|
     | リソースグループ | `AOAI-AppEnv-handson` |
@@ -26,7 +26,7 @@
 
     その他の設定は既定のままで構いません。
 
-* Azure Storage Account
+* **Azure Storage Account**
     | 項目 | 値 |
     |----|----|
     | リソースグループ | `AOAI-AppEnv-handson` |
@@ -38,7 +38,7 @@
 
     その他の設定は既定のままで構いません。
 
-* Azure OpenAI Service
+* **Azure OpenAI Service**
     | 項目 | 値 |
     |----|----|
     | リソースグループ | `AOAI-AppEnv-handson` |
@@ -48,7 +48,7 @@
 
     その他の設定は既定のままで構いません。
 
-* Azure AI Search
+* **Azure AI Search**
     | 項目 | 値 |
     |----|----|
     | リソースグループ | `AOAI-AppEnv-handson` |
@@ -61,7 +61,7 @@
 
 作成には Bicep を使用しますが Azure Portal や Azure CLI を使用して上記の設定内容に従い手動で作成しても構いません。
 
-Bicep 使用する場合の手順は
+Bicep 使用して Azure リソースを作成する場合の手順は以下のとおりです。
 
 \[**手順**\]
 
@@ -110,3 +110,16 @@ Bicep 使用する場合の手順は
    ![Azure Resources](./images/deproyed_resources.png)
 
 ここまでの手順で演習で使用する Azure リソースの作成が完了しました。
+
+<br>
+
+## 次へ
+
+👉　[**準備 2: Azure OpenAI リソースへの AI モデルのデプロイ**](prep02.md)
+
+---
+
+👈　[事前準備](prep.md)
+
+🏚️　[README に戻る](README.md)
+
