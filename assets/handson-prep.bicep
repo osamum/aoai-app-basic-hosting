@@ -2,7 +2,7 @@
 param location string = 'Japan East'
 
 @description('Azure OpenAI をデプロイするリージョン')
-param aoaiLocation string = 'Australia East'
+param aoaiLocation string = 'East US'
 
 @description('作成するリソースに付加するランダムな値')
 param randomString  string = utcNow()
@@ -50,7 +50,7 @@ resource searchService 'Microsoft.Search/searchServices@2020-08-01' = {
 
 // Storage Account（小文字・ハイフンなし制限）
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: 'storage-${uniqueSuffix}'
+  name: 'storage${uniqueSuffix}'
   location: location
   sku: {
     name: 'Standard_LRS'

@@ -1,10 +1,8 @@
 # 準備 1 : Azure リソースの作成
 
-ハンズオンの演習で使用する以下の Azure リソースを作成します。
+ハンズオンの演習で使用する Azure リソースを作成します。
 
-作成には Bicep を使用しますが Azure Portal や Azure CLI を使用して以下の設定で手動で作成しても構いません。
-
-なお、リソースの作成先のリージョンは Azure OpenAI Service だけが `Australia East` で、他のリソースは `Japan East` となるので手動で作成する場合は注意してください。
+この準備作業では **Bicep** を使用して Azure リソースを**自動作成**しますが Azure Portal や Azure CLI を使用して以下の設定で手動で作成しても構いません。なお、手動で作成する場合、リソースの作成先のリージョンは Azure OpenAI Service だけが `East US` で、他のリソースは `Japan East` となるので手動で作成する場合は注意してください。
 
 * **リソースグループ**
     | 項目 | 値 |
@@ -43,7 +41,7 @@
     |----|----|
     | リソースグループ | `AOAI-AppEnv-handson` |
     | 名前 | `aoai-(ユニークな値)` |
-    | リージョン | `Australia East` |
+    | リージョン | `East US` |
     | 価格レベル | Standard 0|
 
     その他の設定は既定のままで構いません。
@@ -59,9 +57,7 @@
     その他の設定は既定のままで構いません。
 
 
-作成には Bicep を使用しますが Azure Portal や Azure CLI を使用して上記の設定内容に従い手動で作成しても構いません。
-
-Bicep 使用して Azure リソースを作成する場合の手順は以下のとおりです。
+Bicep 使用して Azure リソースを自動作成する場合の手順は以下のとおりです。
 
 \[**手順**\]
 
@@ -100,11 +96,16 @@ Bicep 使用して Azure リソースを作成する場合の手順は以下の�
 
     この Bicep ファイルは作成する各リソースにタイムスタンプを付与したユニークな名前を付けてリソースを作成します。
 
+    デプロイが完了するまでしばらく時間がかかるので、しばらく待ちます(※)。
+
+    (※) デプロイ時間はタイミングによって異なりますが、通常は 3 ～ 10 分程度で完了します。
+
 6. デプロイが完了したら Azire ポータル画面で `AOAI-AppEnv-handson` リソースグループを開き、以下のリソースが作成されていることを確認します。
 
    - Azure OpenAI Service
    - Azure AI Search
    - Azure App Service
+   - Azure App Service Plan
    - Azure Storage Account
 
    ![Azure Resources](./images/deproyed_resources.png)

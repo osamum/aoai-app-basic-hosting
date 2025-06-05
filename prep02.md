@@ -28,18 +28,24 @@ Bicep を使用して AI モデルをデプロイする手順は以下のとお�
 
 3. Cloud Shell 画面のメニュー [ファイルの監理] - [アップロード] を選択し、ダウンロードした各モデル用の bicep ファイルをアップロードします
     
-     ![Cloud Shell Menu](./images/cloudShell_upload.png)
+     ![Cloud Shell アップロードメニュー](./images/cloudShell_upload.png)
 
-     ![](./images//cloudShell_selectedfiles.png)
+     ![Cloud Shell ファイルの選択](./images//cloudShell_selectedfiles.png)
 
 4. ファイルのアップロードが完了したら以下のコマンドを実行してアップロードしたファイルがリストされることを確認します。
    
     ```bash
     ls
     ```
-5. 以下のコマンドを実行します。デプロイ中のリソース使用の競合を避けるため、以下の各コマンドが完了するのを待って実行してください。
+5. 以下のコマンドを実行します。デプロイ中のリソース利用のコンフリクトを避けるため、以下の各コマンドが完了するのを待って実行してください。
 
-    またパラメーター `accountName` には、前の手順でデプロイした Azure OpenAI リソースの名前を指定してください。
+    なおコマンドラインのパラメーター `accountName` には、前の手順でデプロイした **Azure OpenAI リソースの名前**を指定してください。
+
+    * 言語モデルのデプロイ
+  
+        ```bash
+        az deployment group create --resource-group AOAI-AppEnv-handson --template-file prep-llm.bicep  --parameters accountName=%Azure OpenAI リソースの名前% 
+        ```
 
     * 埋め込みモデルのデプロイ
   
@@ -51,27 +57,36 @@ Bicep を使用して AI モデルをデプロイする手順は以下のとお�
         ```bash
         az deployment group create --resource-group AOAI-AppEnv-handson --template-file prep-img_gen.bicep --parameters accountName=%Azure OpenAI リソースの名前% 
         ```
-    * 言語モデルのデプロイ
-  
-        ```bash
-        az deployment group create --resource-group AOAI-AppEnv-handson --template-file prep-llm.bicep  --parameters accountName=%Azure OpenAI リソースの名前% 
-        ```
+    デプロイが完了したら Cloud Shell 画面は閉じてしまって構いません。
+
+    もし、失敗する場合は、[AI モデルを手動でデプロイする方法]() の内容に従い、手動でデプロイを行ってください。
+
+6. デプロイが完了したら、Azure ポータルで前の作業で作成した Azure OpenAI サービスのリソース `aoai-(ランダムな値)` を開き、\[**概要**\] メニュー画面内にある \[Explore and deploy\] ボックス内の \[**Explore Azure AI Foundry Portal**\]ボタンをクリックします
+
+    ![Explore Azure AI Foundry Portal ボタン](./images/DeployModel_OpenAIStudio.png)
+
+7. Azure AI Foundry が開かれるので、画面左のメニューバーから \[**デプロイ**\] をクリックします
+
+    ![Azure AI Foundry デプロイメニュー](./images/AOAIStudio_menu_Deploy.png)
+
+8. `gpt-4o-mini`、`text-embedding-ada-002`、`dall-e-3` の 3 つのモデルがリストされることを確認します。もし、リストされていない場合は、画面上部の \[**モデルのデプロイ**\] ボタンをクリックして、モデルを選択し、デプロイを行ってください。
+
+    ![ハンズオンで使用するAzure OpenAI サービスのモデル一覧](./images/aoai_models.png)
 
 
+ ここまでの手順で、ハンズオンで使用する Azure OpenAI サービスの AI モデルがデプロイされました。
 
-Azure ポータル画面でデプロイされた Azure OpenAI リソースのアイコンをクリックしてを開き、以下の手順に従い各 AI モデルをデプロイしてください。
+ もし、ここまでの手順でデプロイがうまくいかなかった場合は、以下の手順に従い各 AI モデルをデプロイしてください。
 
 なお、この手順は [Azure OpenAI アプリケーション開発ハンズオン](https://github.com/osamum/AOAI-first-step-for-Developer)コンテンツに遷移するので、**デプロイが完了したら次の演習には進まずにこのページに戻ってきてください**。
-
-* [Azure AI Foundry から言語モデル gpt-4o-mini のデプロイ](https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex01-2.md)
-* [Azure AI Foundry から埋め込みモデル : text-embedding-ada-002 のデプロイ](https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex01-3.md)
-* [Azure AI Foundry から画像生成モデル : dall-e-3 のデプロイ](https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex01-4.md)
-
----
 
 * <a target="_blank" href="https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex01-2.md">Azure AI Foundry から言語モデル gpt-4o-mini のデプロイ</a>
 * <a target="_blank" href="https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex01-3.md">Azure AI Foundry から埋め込みモデル : text-embedding-ada-002 のデプロイ</a>
 * <a target="_blank" href="https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex01-4.md">Azure AI Foundry から画像生成モデル : dall-e-3 のデプロイ</a>
+
+
+---
+
 
 <br>
 
