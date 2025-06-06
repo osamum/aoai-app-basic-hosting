@@ -127,25 +127,15 @@ Bicep 使用して Azure リソースを自動作成する場合の手順は以�
    
     ![Azure Blob Container](images/check_storageBlob.png) 
 
-    続いて Azure Storage Account のアクセス設定を行います。
-
-8. Azure Storage Account の画面で、\[設定\]-\[**構成**\] メニューをクリックします。遷移した画面で \[**Azure portal で Microsoft Entra 認可を既定にする**\] の設定を **有効** にし、画面上部の \[**保存**\] ボタンをクリックします。
-
-    ![Azure Storage の Microsoft Entra 認可](images/storage_allow_entraAuth.png)
-
-    この設定は Azure AI Search で Azure Storage Account 上のデータにアクセスしてインデックスを作成する際に必要な設定の一部です。
-
-    Azure Storage Account の確認はここまでで完了です。
-
-9. デプロイされた AI モデルを確認します。 Azure OpenAI サービスのリソース `aoai-(ランダムな値)` を開き、\[**概要**\] メニュー画面内にある \[Explore and deploy\] ボックス内の \[**Explore Azure AI Foundry Portal**\]ボタンをクリックします
+8. デプロイされた AI モデルを確認します。 Azure OpenAI サービスのリソース `aoai-(ランダムな値)` を開き、\[**概要**\] メニュー画面内にある \[Explore and deploy\] ボックス内の \[**Explore Azure AI Foundry Portal**\]ボタンをクリックします
 
     ![Explore Azure AI Foundry Portal ボタン](./images/DeployModel_OpenAIStudio.png)
 
-10. Azure AI Foundry が開かれるので、画面左のメニューバーから \[**デプロイ**\] をクリックします
+9.  Azure AI Foundry が開かれるので、画面左のメニューバーから \[**デプロイ**\] をクリックします
 
     ![Azure AI Foundry デプロイメニュー](./images/AOAIStudio_menu_Deploy.png)
 
-11. `gpt-4o-mini`、`text-embedding-ada-002`、`dall-e-3` の 3 つのモデルがリストされることを確認します。もし、リストされていない場合は、画面上部の \[**モデルのデプロイ**\] ボタンをクリックして、モデルを選択し、デプロイを行ってください。
+10. `gpt-4o-mini`、`text-embedding-ada-002`、`dall-e-3` の 3 つのモデルがリストされることを確認します。もし、リストされていない場合は、画面上部の \[**モデルのデプロイ**\] ボタンをクリックして、モデルを選択し、デプロイを行ってください。
 
     ![ハンズオンで使用するAzure OpenAI サービスのモデル一覧](./images/aoai_models.png)
 
