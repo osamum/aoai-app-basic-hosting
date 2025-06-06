@@ -59,6 +59,15 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   properties: {}
 }
 
+// Blob コンテナー rag-data-store
+resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01' = {
+  name: 'storage${uniqueSuffix}/default/rag-data-store'
+  properties: {}
+  dependsOn: [
+    storageAccount
+  ]
+}
+
 // Azure OpenAI アカウント
 resource aoai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   name: 'aoai-${uniqueSuffix}'
@@ -70,6 +79,51 @@ resource aoai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   properties: {
     apiProperties: {
       // モデルデプロイ用プロパティは必要に応じて追加
+    }
+  }
+}
+
+
+resource gpt4oMini 'Microsoft.CognitiveServices/accounts/deployments@2025-04-01-preview' = {
+  name: 'gpt-4o-mini'
+  parent: aoai
+  dependsOn: [
+    aoai
+  ]
+  properties: {
+    model: {
+      name: 'gpt-4o-mini'
+      format: 'OpenAI'
+    }
+  }
+}
+
+resource embeddingAda002 'Microsoft.CognitiveServices/accounts/deployments@2025-04-01-preview' = {
+  name: 'text-embedding-ada-002'
+  parent: aoai
+  dependsOn: [
+    gpt4oMini
+  ]
+  properties: {
+    model: {
+      name: 'text-embedding-ada-002'
+      version: '2'
+      format: 'OpenAI'
+    }
+  }
+}
+
+resource dalle3 'Microsoft.CognitiveServices/accounts/deployments@2025-04-01-preview' = {
+  name: 'dall-e-3'
+  parent: aoai
+  dependsOn: [
+    embeddingAda002
+  ]
+  properties: {
+    model: {
+      name: 'dall-e-3'
+      version: '3.0'
+      format: 'OpenAI'
     }
   }
 }

@@ -2,14 +2,13 @@
 
 ハンズオンの演習で使用する Azure リソースを作成します。
 
-この準備作業では **Bicep** を使用して Azure リソースを**自動作成**しますが Azure Portal や Azure CLI を使用して以下の設定で手動で作成しても構いません。なお、手動で作成する場合、リソースの作成先のリージョンは Azure OpenAI Service だけが `East US` で、他のリソースは `Japan East` となるので手動で作成する場合は注意してください。
+この準備作業では **Bicep** を使用して以下の Azure リソースを**自動作成**します。
 
-* **リソースグループ**
+* **リソースグループ** (※これはコマンドで手動で作成します)
     | 項目 | 値 |
     |----|---|
     | リソースグループ名 | `AOAI-AppEnv-handson` |
     | リージョン | `Japan East` |
-
 
 * **Azure App Service**
     | 項目 | 値 |
@@ -22,7 +21,7 @@
     | リージョン | `Japan East` |
     | 価格プラン | B1 |
 
-    その他の設定は既定のままで構いません。
+    その他の設定は既定のまま
 
 * **Azure Storage Account**
     | 項目 | 値 |
@@ -34,17 +33,12 @@
     | アカウントの種類 | StorageV2 (汎用 v2) |
     | 冗長性 | LRS |
 
-    その他の設定は既定のままで構いません。
+    * **BLOB コンテナー**
+        | 項目 | 値 |
+        |----|----|
+        | 名前 | `rag-data-store` |
 
-* **Azure OpenAI Service**
-    | 項目 | 値 |
-    |----|----|
-    | リソースグループ | `AOAI-AppEnv-handson` |
-    | 名前 | `aoai-(ユニークな値)` |
-    | リージョン | `East US` |
-    | 価格レベル | Standard 0|
-
-    その他の設定は既定のままで構いません。
+    その他の設定は既定のまま
 
 * **Azure AI Search**
     | 項目 | 値 |
@@ -54,21 +48,40 @@
     | リージョン | `Japan East` |
     | 価格レベル | Standard  |
 
-    その他の設定は既定のままで構いません。
+    その他の設定は既定のまま
 
+* **Azure OpenAI Service**
+    | 項目 | 値 |
+    |----|----|
+    | リソースグループ | `AOAI-AppEnv-handson` |
+    | 名前 | `aoai-(ユニークな値)` |
+    | リージョン | `East US` |
+    | 価格レベル | Standard 0|
+
+    * **デプロイされる AI モデル**
+        | モデル | 種類 | 用途 |
+        |----|---|---|
+        | gpt-4o-mini | テキスト生成 | 会話 |
+        | dall-e-3 | 画像生成 | 画像の生成 |
+        | text-embedding-ada-002 | 埋め込み | 検索ワードのベクトル化 |
+
+    その他の設定は既定のまま
+
+
+なお、Bicep を使用せずに Azure Portal や Azure CLI を使用して手動で作成しても構いませんが、リソースの作成先のリージョンは Azure OpenAI Service だけが `East US` で、他のリソースは `Japan East` となるのでご注意ください。
 
 Bicep 使用して Azure リソースを自動作成する場合の手順は以下のとおりです。
 
 \[**手順**\]
 
 1. 以下の Bicep ファイルをダウンロードします。
-   - [handson-prep.bicep](./assets/handson-prep.bicep)
+   - [prep-az-resource.bicep](./assets/prep-az-resource.bicep)
   
 2. Azure ポータルにログインし、画面右上にある Cloud Shell アイコンをクリックして Cloud Shell 画面を開きます
 
     ![Cloud Shell](./images/cloudShell_menu.png)
    
-3. Cloud Shell 画面で、以下のコマンドを実行してリソースグルーブを作成します
+3. Cloud Shell 画面で、以下のコマンドを実行してリソースグルーブ `AOAI-AppEnv-handson` を作成します
    ```bash
    az group create --name AOAI-AppEnv-handson --location "Japan East"
    ```
@@ -79,7 +92,7 @@ Bicep 使用して Azure リソースを自動作成する場合の手順は以�
     az group list --query "[?name=='AOAI-AppEnv-handson']" --output table
     ```
 
-4. Cloud Shell 画面のメニュー \[ファイルの監理\] - \[アップロード\] を選択し、ダウンロードした `handson-prep.bicep` ファイルをアップロードします
+4. Cloud Shell 画面のメニュー \[ファイルの監理\] - \[アップロード\] を選択し、ダウンロードした `prep-az-resource.bicep` ファイルをアップロードします
 
     ![Cloud Shell Menu](./images/cloudShell_upload.png)
     
@@ -91,7 +104,7 @@ Bicep 使用して Azure リソースを自動作成する場合の手順は以�
 5. アップロードした Bicep ファイルを使用して Azure リソースをデプロイします。実行するコマンドは以下のとおりです。
 
     ```bash
-    az deployment group create --resource-group AOAI-AppEnv-handson --template-file handson-prep.bicep
+    az deployment group create --resource-group AOAI-AppEnv-handson --template-file prep-az-resource.bicep
     ```
 
     この Bicep ファイルは作成する各リソースにタイムスタンプを付与したユニークな名前を付けてリソースを作成します。
@@ -110,13 +123,64 @@ Bicep 使用して Azure リソースを自動作成する場合の手順は以�
 
    ![Azure Resources](./images/deproyed_resources.png)
 
-ここまでの手順で演習で使用する Azure リソースの作成が完了しました。
+7. デプロイされた Azure Storage Account リソース `storage(ランダムな値)`を開き、\[**BLOB コンテナー**\] メニューをクリックして、`rag-data-store` という名前の BLOB コンテナーが作成されていることを確認します。
+   
+    ![Azure Blob Container](images/check_storageBlob.png) 
 
+    続いて Azure Storage Account のアクセス設定を行います。
+
+8. Azure Storage Account の画面で、\[設定\]-\[**構成**\] メニューをクリックします。遷移した画面で \[**Azure portal で Microsoft Entra 認可を既定にする**\] の設定を **有効** にし、画面上部の \[**保存**\] ボタンをクリックします。
+
+    ![Azure Storage の Microsoft Entra 認可](images/storage_allow_entraAuth.png)
+
+    この設定は Azure AI Search で Azure Storage Account 上のデータにアクセスしてインデックスを作成する際に必要な設定の一部です。
+
+    Azure Storage Account の確認はここまでで完了です。
+
+9. デプロイされた AI モデルを確認します。 Azure OpenAI サービスのリソース `aoai-(ランダムな値)` を開き、\[**概要**\] メニュー画面内にある \[Explore and deploy\] ボックス内の \[**Explore Azure AI Foundry Portal**\]ボタンをクリックします
+
+    ![Explore Azure AI Foundry Portal ボタン](./images/DeployModel_OpenAIStudio.png)
+
+10. Azure AI Foundry が開かれるので、画面左のメニューバーから \[**デプロイ**\] をクリックします
+
+    ![Azure AI Foundry デプロイメニュー](./images/AOAIStudio_menu_Deploy.png)
+
+11. `gpt-4o-mini`、`text-embedding-ada-002`、`dall-e-3` の 3 つのモデルがリストされることを確認します。もし、リストされていない場合は、画面上部の \[**モデルのデプロイ**\] ボタンをクリックして、モデルを選択し、デプロイを行ってください。
+
+    ![ハンズオンで使用するAzure OpenAI サービスのモデル一覧](./images/aoai_models.png)
+
+
+ここまでの手順で演習で使用する Azure リソースの作成と AI モデルのデプロイが完了しました。
+
+### AI モデルを手動でデプロイする方法
+
+ もし、ここまでの手順でデプロイがうまくいかなかった場合、Azure のリソースについては前述の情報を参考に Azure Portal や Azure CLI を使用して手動で作成してください。
+ 
+ AI モデルについては以下の手順を参考にデプロイしてください。
+
+なお、この手順は [Azure OpenAI アプリケーション開発ハンズオン](https://github.com/osamum/AOAI-first-step-for-Developer)コンテンツに遷移するので、デプロイが完了したら**次の演習には進まずに**このページに戻ってきてください。
+
+* <a target="_blank" href="https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex01-2.md">Azure AI Foundry から言語モデル gpt-4o-mini のデプロイ</a>
+* <a target="_blank" href="https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex01-3.md">Azure AI Foundry から埋め込みモデル : text-embedding-ada-002 のデプロイ</a>
+* <a target="_blank" href="https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex01-4.md">Azure AI Foundry から画像生成モデル : dall-e-3 のデプロイ</a>
+  
 <br>
+
+
+
+## 接続情報の取得
+
+デプロイした Azure OpenAI サービスの接続情報を取得します。これらの情報は、演習用アプリケーションの設定に使用します。
+
+具体的な手順については以下のリンク先のドキュメントの手順を参照してください。
+
+* [**Azure OpenAI サービスの接続情報の入手**](https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex03-0.md#%E6%8E%A5%E7%B6%9A%E6%83%85%E5%A0%B1%E3%81%AE%E5%85%A5%E6%89%8B)
+
+この手順は [Azure OpenAI アプリケーション開発ハンズオン](https://github.com/osamum/AOAI-first-step-for-Developer)コンテンツに遷移するので、接続情報をメモしたら**次の演習には進まずに**このページに戻ってきてください。
 
 ## 次へ
 
-👉　[**準備 2: Azure OpenAI リソースへの AI モデルのデプロイ**](prep02.md)
+👉　[**準備 2: Azure AI Search のインデックスの作成**](prep02.md)
 
 ---
 
