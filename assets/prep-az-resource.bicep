@@ -77,9 +77,7 @@ resource aoai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
   }
   kind: 'OpenAI'
   properties: {
-    apiProperties: {
-      // モデルデプロイ用プロパティは必要に応じて追加
-    }
+    customSubDomainName: 'aoai-${uniqueSuffix}'
   }
 }
 
