@@ -10,6 +10,18 @@
 
 <br>
 
+## 必要なツール 
+
+この作業には以下のツールが必要です。インストールされていない場合は、以下のリンクからインストールを実施してください。
+* **Visual Studio Code**  
+  [Visual Studio Code のダウンロード](https://code.visualstudio.com/Download)
+
+* **Node.js**  
+  [Node.js のダウンロード](https://nodejs.org/ja/download/)
+
+* **Git**  
+  [Git のダウンロード](https://git-scm.com/downloads)
+
 ## 1. 演習用アプリケーションの入手
 
 演習用アプリケーションのプロジェクトはテンプレートリポジトリとして作成されています。
