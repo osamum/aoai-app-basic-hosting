@@ -1,152 +1,157 @@
-# 準備 2: Azure AI Search のインデックスの作成
+# 準備 2 : 演習用アプリケーションの入手と実行
 
-演習用アプリケーションの RAG の機能を有効化するために、Azure AI Search のインデックスを作成します。
+演習で使用するアプリケーションを入手し、実行可能状態とします。
 
-## Blob コンテナーへのドキュメントのアップロード
+アプリケーションのプロジェクトの入手は GitHub 上にあるアプリケーションのリポジトリを直接クローンするのではなく、いったん受講者自身の GitHub アカウントにコピーしてから行います。
 
-Azure AI Serch で検索を行うためのドキュメントを Azure Storage Blob コンテナーにアップロードします。
+これはアプリケーションを Azure App Service にデプロイする際に、この GitHub リポジトリを経由して行うことでコードを修正した際の更新作業を容易にするためです。
 
-具体的な手順は以下のとおりです。
-
-\[**手順**\]
-
-1. ここまでの作業でデプロイされた Azure Storage Account リソース `storage(ランダムな値)`を開き、\[**BLOB コンテナー**\] メニューをクリックして、`rag-data-store` をクリックします
-   
-    ![Azure Blob Container](images/check_storageBlob.png) 
-
-
-2. 遷移した画面上部の \[**↑ アップロード**\] ボタンをクリックすると、画面右に \[**Blob のアップロード**\] ブレードが表示されます
-
-    「**ファイルをこちらにドラッグ アンド ドロップまたはファイルの参照**」と書かれた灰色のボックス内に以下の検証用のダミーデータのファイルをドラッグ アンド ドロップするか、\[**ファイルの参照**\]リンクをクリックしてファイルを選択します
-
-    - [**RAG 検証用ダミーデータ**](assets/RAG_TestData.txt)
-
-    アップロード エリアにファイル名が表示されたら、\[**ファイルのアップロード**\] ボタンをクリックします
-
-    ![ファイルのアップロード](images/storage_blob_upload.png)
-
-    アップロードが完了すると、アップロードしたファイルが一覧に表示されます。
-
-    続いてアクセス許可の設定を行います。
-    
-3. Azure Storage Account の画面で、\[設定\]-\[**構成**\] メニューをクリックします。遷移した画面で \[**Azure portal で Microsoft Entra 認可を既定にする**\] の設定を **有効** にし、画面上部の \[**保存**\] ボタンをクリックします。
-
-    ![Azure Storage の Microsoft Entra 認可](images/storage_allow_entraAuth.png)
-
-    この設定は Azure AI Search で Azure Storage Account 上のデータにアクセスしてインデックスを作成する際に必要な設定の一部です。
-
-ここまでの手順で Azure Storage アカウントへのデータのアップロードが完了しました。
+リポジトリのコピー後、受講者自身の GitHub リポジトリからローカル環境にアプリケーションをクローンし、起動のための設定を行い、正常動作を確認します。
 
 <br>
 
-## Azure AI Search マネージド ID の有効化とアクセス許可
+## 1. 演習用アプリケーションの入手
 
-Azure AI Search のインデックス作成にインポート ウィザードを使用しますが、その際、Azuze Storage へのアクセスにキー認証が選択できなくなったためマネージド ID 認証を使用する必要があります。
+演習用アプリケーションのプロジェクトはテンプレートリポジトリとして作成されています。
 
-ここではマネージド ID 認証に必要な設定を行います。
+同テンプレートを使用してユーザー自身の新規リポジトリの作成手順は以下のとおりです。
 
-具体的な手順は以下のとおりです。
+ 1. 以下の URL にアクセスし、画面右上のボタン \[**Use this template**\]` をクリックし、\[**Create a new repository**\] を選択します  
+      
+    [basic-gpt-chatbot](https://github.com/osamum/basic-gpt-chatbot)
 
-\[**手順**\]
-
-1. ここまでの作業でデプロイされた Azure AI Search リソース `search(ランダムな値)` を開き、\[設定\]-\[**ID**\] メニューをクリックします
-
-    遷移した画面で \[**状態**\] の設定を **オン** にし、画面上部の \[**保存**\] ボタンをクリックします。
-
-    ![Azure AI Search マネージド ID の設定](images/AISearch_managedID_Enable.png)
-
-    これでこの Azure AI Search リソースにマネージド ID が付与されました。
-
-2. Azure AI Search リソースにマネージド ID が有効になると \[**Azure ロールの割り当て**\] ボタンが表示されるのでクリックします
-
-    ![Azure AI Search マネージド ID の設定](images/AISearch_managedID_Enabled.png)
-
-3. \[**Azure ロールの割り当て**\] 画面に遷移するので、画面上部の \[**+ ロールの割り当ての追加**\] ボタンをクリックします
-
-    画面右側に \[**ロールの割り当ての追加**\] ブレードが表示されるので各項目のドロップダウン リストを以下のように設定します
-
-    |項目 | 設定値 |
-    |---|---|
-    |スコープ| **ストレージ** |
-    |サブスクリプション| この演習に使用しているもの |
-    |リソース| この演習でデプロイした Azure Storage アカウント |
-    |役割| **ストレージ BLOB データ閲覧者** |
-
-    ![Azure AI Search マネージド ID の設定](images/AISearch_roll_assign.png)
-
-    設定が完了したら、画面下部の \[**保存**\] ボタンをクリックします。
-
-ここまでの作業で Azure AI Search のマネージド ID を有効にし、指定した Azure Storage アカウントの BLOB コンテナーにデータの閲覧者してアクセスできるようになりました。
+      <img src="images/template-button.png" width="700">
+      <br>
+    
+1. **Create a new repository** 画面の各項目を以下のように設定します
+      
+     |  項目  |  値  |
+     | ---- | ---- |   
+     | Owner * | 自身のアカウント |
+     | Repository name * | handson-bot |
+     | Description (Optional) | 任意の説明 |
+     | Public or Private|Public にチェック|
+     | Include all branches | チェックしない|
+    
+2. 同ページの \[**Create repository from template**\] ボタンをクリックしてご自身の GitHub アカウントに `handson-bot` リポジトリが作成されたことを確認します
+ 
+ここまでの手順で自身の GitHub アカウントに `handson-bot` リポジトリが作成されました。
 
 <br>
 
-## Azure AI Search インデックスの作成
+## 2. ローカル環境へのクローンとアプリケーションの実行
 
-Azure Blob コンテナーにアップロードしたドキュメントを Azure AI Search を使用してベクトル検索できるようにインデックスを作成します。
+GitHub アカウントに作成した `handson-bot` リポジトリをローカル環境にクローンし、アプリケーションの実行に必要な設定と依存関係のインストールを行います。
 
 具体的な手順は以下のとおりです。
 
 \[**手順**\]
 
-1. 作業中の Azure AI Search リソース `search(ランダムな値)` の \[概要\] 画面を開き、画面上部の \[**データのインポートとベクター化**\] ボタンをクリックします
+1. ご自身の GitHub アカウントに作成した `handson-bot` リポジトリにアクセスし、画面内の \[**\<\> Code**\] ボタンをクリックし、表示された \[Local\] タブ内の \[**HTTPS**\] の URL をコピーします
 
-    ![Azure AI Search インポート ウィザード](images/AISearch_menu_inport.png)
+    ![GitHub リポジトリのクローン URL のコピー](images/copy_clone_url.png)
 
-2. \[**データのインポートとベクター化**\] 画面に遷移し、データソースの選択メニューが表示されるので、\[** Azure Blob Storage**\] タイルをクリックします 
+2. ローカル環境の任意のディレクトリに移動し、以下のコマンドを実行して `handson-bot` リポジトリをクローンします
+
+    ```bash
+    git clone　<コピーしたURL>
+    ```
+3. クローンしたディレクトリに移動し、Visual Studio Code で開きます
+
+    ```bash
+    cd handson-bot
+    code .
+    ```
+
+4. プロジェクトのルート ディレクトリにあるファイル `example.env` をコピーするか名前を変更し `.env` ファイルを作成します
+
+5. `.env` ファイルを開き、[接続情報の取得](prep01.md#%E6%8E%A5%E7%B6%9A%E6%83%85%E5%A0%B1%E3%81%AE%E5%8F%96%E5%BE%97)で取得した接続情報を使用して、以下の内容を参考に環境設定を行います。なお、ここまでの手順のとおり設定を行っているのであれば `AZURE_OPENAI_ENDPOINT` と `AZURE_OPENAI_API_KEY` の値を設定するだけで、他の設定は設定値のままで問題ありません。
    
-    ![データソースの選択](images/AISearch_select_datasource.png)
+    ```env
+    #Azure OpeAI Service リソースの接続情報
+    AZURE_OPENAI_ENDPOINT=　Azure OpeAI Service リソースのエンドポイント URL
+    AZURE_OPENAI_API_KEY=　Azure OpeAI Service リソースの API キー
 
-3. シナリオの選択画面に遷移するので、\[**RAG**\] タイルをクリックします
+    #言語モデルの設定
+    LM_SETTINGS={"deploymentName":"言語モデルのデプロイ名", "apiVersion":"API のバージョン", "conversationLength":"会話を保持する件数", "tokenLimit":"トークンの上限"}
 
-    ![シナリオの選択](images/AISearch_select_scenario.png)
+    #埋め込みモデルの設定
+    EMBEDDING_SETTINGS={"deployName":"埋め込みモデルのデプロイ名", "apiVersion":"API のバージョン"}
 
-4. \[**Azure Blob Storage の構成**] 画面に遷移するので、各項目を以下のように設定します
+    #画像生成モデルの設定
+    IMAGE_GENERATOR_SETTINGS={"deploymentName":"画像生成モデルのデプロイ名", "apiVersion":"API のバージョン", "imageSize":"画像のサイズ","imageStyle":"vivid"}
+    ```
+    設定が完了したキーボードの \[**Ctrl + S**\] キーを押して保存します。
+
+5. アプリケーションの依存関係をインストールします
    
-    |項目 | 設定値 |
-    |---|---|
-    |サブスクリプション| この演習に使用しているサブスクリプション |
-    |ストレージ アカウント| この演習でデプロイしたストレージ アカウント|
-    |BLOB コンテナー| `rag-data-store` |
-    |BLOB フォルダー| 既定のまま |
-    |解析モード| **テキスト** |
-    |マネージド ID の種類| **システム 割り当て** |
+   Visual Studio Code メニュー \[View\] - \[Terminal\] をクリックしてターミナルを開き、以下のコマンドを実行します。
 
-    ![Azure Blob Storage の構成](images/AISearch_select_settingStorage.png)
+    ```bash
+    npm install
+    ```
+6. 依存関係のインストールが完了したら、以下のコマンドを実行してアプリケーションを起動します
 
-    各項目の設定か完了したら \[**次へ**\] ボタンをクリックします。
+    ```bash
+    npm start
+    ```
 
-5. \[**テキストをベクトル化する**\] 画面に遷移するので、各項目を以下のように設定します
+    以下のメッセージが表示されるのを待って表示された URL をクリックします
 
-    |項目 | 設定値 |
-    |---|---|
-    |Kind| \[**Azure OpenAI**\] |
-    |サブスクリプション \*| この演習で使用しているサブスクリプション |
-    |Azure OpenAI Service \*| この演習でデプロイした Azure OpenAI リソース |
-    |モデル デプロイ \*| \[**text-embbedings-ada-002**\]  |
-    |認証の種類| \[**API キー**\] |
-    |Azure OpenAI サービスに接続すると、アカウントに追加料金が発生することを承認します。| チェック |
+    ```bash
+    Server is running on http://localhost:3000
+    ```
 
-    ![テキスト ベクトル化の設定](images/AISearch_textVector_setting.png)
+7. ブラウザが起動し、アプリケーションのトップページが表示されることを確認します
 
-    各項目の設定か完了したら \[**次へ**\] ボタンをクリックします。
+    以下のプロンプトを実行して、アプリケーションが正常に動作することを確認します
 
-6. \[**高度なランク付けと関連性**\] 画面に遷移するので、既定の設定のまま \[**次へ**\] ボタンをクリックします
+    ```text
+    こんにちは
+    ```
 
-    ![高度なランク付けと関連性の設定](images/AISearch_setting_ranker.png)
-    
+    ```text
+    簡単に自己紹介をしてください
+    ```
 
-7. 遷移した画面内の \[オブジェクト名のプレフィックス\] の内容を `rag-index` に変更します。この値がインデックス名になります。
+    以下の質問に正しい結果が返ってくることで Function Calling が正常に動作していることを確認します
 
-    ![インデックス名の設定](images/AISearch_indexName_setting.png)
+    ```text
+    現在時刻を教えてください
+    ```
 
-    画面下部の \[**作成**\] ボタンをクリックします。
+    画像が生成できるか確認するために以下のプロンプトを実行します
 
-8. \[**作成に成功しました**\] というメッセージ ボックスが表示されたら \[**検索の開始**\] ボタンをクリックします
+    ```text
+    あなたが考える AI アシスタントの画像を生成してください
+    ```
 
-9. 作成したインデックスの画面で \[**検索エクスプローラー**\] タブが表示されるので、検索ボックスに `*` を入力し、\[**検索**\] ボタンをクリックします
+    画像が認識できるか確認するために以下のプロンプトを実行します
 
-    ![Azure AI Search インデックスの検索](images/AISearch_findExplorer.png)
+    ```text
+    この画像に映っている料理の作り方を教えてください https://osamum.github.io/publish/assets/steak.jpg
+    ```
 
-    検索結果にアップロードしたドキュメントの内容が表示されれば、インデックスの作成は成功です。
+    RAG の設定がされていないので、以下の質問については回答できないことを確認します
 
-ここまでの手順で Azure AI Search のインデックスの作成が完了しました。
+    ```text
+    やまたのおろち製作所の所在地を教えてください
+    ```
+
+    ここまでの手順で演習用アプリケーションの入手とローカルでの実行が完了しました。
+
+この準備作業では演習用アプリケーションを入手し、ローカル環境で実行可能な状態にしました。
+
+次の準備作業では、Azure AI Search のインデックスを作成し、RAG を有効化し、さらにその次の作業でアプリケーションを Azure App Service にデプロイして準備作業は完了です。
+
+
+## 次へ
+
+👉　[**準備 3: Azure AI Search のインデックスの作成と RAG の有効化**](prep03.md)
+
+---
+
+👈　[準備 1 : Azure リソースの作成](prep01.md)
+
+🏚️　[README に戻る](README.md)
+
