@@ -78,31 +78,24 @@ MCP AZ-900 の内容については以下をご覧ください。
 
 * [**Microsoft Azure** アカウント](https://learn.microsoft.com/ja-jp/dotnet/azure/create-azure-account)
 * [**GitHub** アカウント](https://github.com/signup)
+* [**Visual Studio Code**](https://code.visualstudio.com/)
+    * [Azure Tools 拡張機能パック](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack)
+* [**Node.js**](https://nodejs.org/ja/)
+* [**Git ツール**](https://git-scm.com/downloads)
   
-    (※) Visual Studio Code 等から Azure App Service へのデプロイ方法をご存じの場合は、GitHub アカウントがなくても一部の演習をスキップしてハンズオンを実施することができます。
-
-ツール
-
-  * [**Visual Studio Code**](https://code.visualstudio.com/)
-  * [**Node.js**](https://nodejs.org/ja/)
-  * [**Git ツール**](https://git-scm.com/downloads)
-  
-    (※) GitHub リポジトリから zip 形式でのダウンロードの方法をご存じの場合は、Git ツールがなくても一部の演習をスキップしてハンズオンを実施することができます。
-
-## 事前準備
-
-1. Azure リソースの作成
-2. Azure OpenAI リソースへの AI モデルのデプロイ
-3. Azure AI Search のインデックス作成
-4. 演習用アプリケーションの GitHub リポジトリの作成とクローン
-5. 演習用アプリケーションのローカルでの動作確認
-6. GitHub リポジトリからの演習用アプリケーションの Azure App Service へのデプロイ
+   (※) GitHub リポジトリから zip 形式でのダウンロードの方法をご存じの場合は、Git ツールがなくても一部の演習をスキップしてハンズオンを実施することができます。
 
 <br>
 
 ## 演習
 
-1. アプリケーションをホストするための基本的な設定
+1. [Azure リソースの作成とアプリケーションのデプロイ](Ex01.md)
+   1. [Azure リソースの作成](Ex01-1.md)
+   2. [演習用アプリケーションの入手と実行](Ex01-2.md)
+   3. [演習用アプリケーションの RAG の有効化](Ex03-3.md)
+   4. [演習用アプリケーションの Azure へのデプロイ](Ex01-4.md)
+
+2. アプリケーションをホストするための基本的な設定
     1. 構成情報の確認
     2. ログの有効化
     3. バックアップの設定
@@ -116,11 +109,11 @@ MCP AZ-900 の内容については以下をご覧ください。
        1. メトリック アラートの設定
        2. Log Analytics を使用したログの分析
        3. Application Insights 使用したアプリケーションの監視
- 2. セキュリティと Azure サービス間の認証設定
+ 3. セキュリティと Azure サービス間の認証設定
     1. App Service 自動認証
     2. Key Vault へのキーの登録と利用
     3. マネージド ID によるサービス間認証
- 3. サービスの閉域化
+ 4. サービスの閉域化
     1. Jump Box の構築
        1. 仮想ネットワークの構築
        2. 仮想マシンの作成
@@ -132,12 +125,12 @@ MCP AZ-900 の内容については以下をご覧ください。
           - 仮想ネットワークピアリングの設定
     3. 閉域化された App Service へのアプリケーションのデプロイ
        - GitHub Selfhosted Runner のインストールと設定
-4. Application Gateway を介した Web アプリケーションの公開
+3. Application Gateway を介した Web アプリケーションの公開
     1. Application Gateway の作成
     2. Application Gateway の設定
     3. Application Gateway を介した Web アプリケーションの公開
     4. DDoS Protection の有効化
- 5. オプション : Azure API Management Service を介した Azure OpenAI サービスの利用 
+ 4. オプション : Azure API Management Service を介した Azure OpenAI サービスの利用 
     1. Azure API Management Service のデプロイ
     2. Azure OpenAI サービスの API の登録
     3. ルール設定
