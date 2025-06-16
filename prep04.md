@@ -1,0 +1,148 @@
+# 準備 4 : Azure への演習用アプリケーションのデプロイ
+
+ローカル環境で正常動作が確認できた演習用アプリケーションを [準備 1 : Azure リソースの作成](prep01.md) で作成しておいた Azure App Service にデプロイします。
+
+この準備作業では、作成済みの Azure App Service に対し、環境変数を設定し、その後、GitHub リポジトリを介してアプリケーションをデプロイします。
+
+この準備作業では、Azure App Service へのアプリケーションの配置はもちろん、GitHub Action を使用した CI/CD 環境も構築されます。
+
+## 1. Azure App Service の環境変数の設定
+
+Azure App Service の環境変数の設定は、Azutre Portal や Azure CLI の以下のコマンドで行えますが、各環境変数ごとに設定するのは手間がかかるので Bicep を使用して一括で設定します。
+
+具体的な手順は以下のとおりです。
+
+\[**手順**\]
+
+1. 以下の内容をメモ帳などのテキストエディタに貼り付け、環境変数の設定の中身をコメントに従い書き換えます
+
+    ``` bicep
+    param siteName string
+    param location string = resourceGroup().location
+
+    resource appService 'Microsoft.Web/sites@2022-03-01' existing = {
+    name: siteName
+    }
+
+    resource appSettings 'Microsoft.Web/sites/config@2022-03-01' = {
+     name: '${siteName}/appsettings'
+     properties: {
+        'SCM_DO_BUILD_DURING_DEPLOYMENT' : 'true'
+        'AZURE_OPENAI_ENDPOINT' : 'AzureOpenAI サービスのエンドポイント'
+        'AZURE_OPENAI_API_KEY' : 'AzureOpenAI サービスの API キー'
+        'LM_SETTINGS' : '{"deploymentName":"gpt-4o-mini", "apiVersion":"2024-05-01-preview", "conversationLength":"10", "tokenLimit":"20000"}'
+        'IMAGE_GENERATOR_SETTINGS' : '{"deployName":"text-embedding-ada-002", "apiVersion":"2023-05-15"}'
+        'EMBEDDING_SETTINGS' : '{"deployName":"text-embedding-ada-002", "apiVersion":"2023-05-15"}'
+        'SEARCH_ENDPOINT' : 'Azure AI Search のエンドポイント'
+        'SEARCH_API_KEY' : 'Azure AI Search の API キー'
+        'SEARCH_SETTINGS' : '{"indexName":"reg-index","fieldName":"text_vector","thresholdScore":"5.8"}'
+     }
+    }
+    ```
+
+    上記の内容を `prep-app-env.bicep` という名前で保存します
+
+2. [Azure ポータル](https://portal.azure.com)にログインし、画面右上にある Cloud Shell アイコンをクリックして Cloud Shell 画面を開きます
+
+    ![Cloud Shell](./images/cloudShell_menu.png)
+
+3. Cloud Shell 画面のメニュー \[ファイルの監理\] - \[アップロード\] を選択し、作成した `prep-app-env.bicep` ファイルをアップロードします
+
+    ![Cloud Shell Menu](./images/cloudShell_upload.png)
+    
+    ファイルのアップロードが完了したら以下のコマンドを実行してアップロードしたファイルがリストされることを確認します。
+
+    ```bash
+    ls
+    ```
+5. アップロードした Bicep ファイルを使用して Azure リソースをデプロイします。実行するコマンドは以下のとおりです。
+
+    ```bash
+    az deployment group create --resource-group AOAI-AppEnv-handson --template-file prep-app-env.bicep --parameters siteName=環境変数を設定する Azure App Service の名前
+    ```
+    
+    Bicep の実行が完了するまで待ちます。
+
+6. デプロイが完了したら Azure App Service のプロパティ画面を開き、画面左のメニュー \[設定\] - \[**環境変数**\]をクリックします
+   
+    環境変数の一覧が表示されるので、Bicep に記述した環境変数が正しく設定されていることを確認します。
+
+    ![Azure App Service Settings](./images/AppSrv_setting_env.png)
+
+    もし、足りないものや誤っているものがあれば、同画面で直接修正してください。
+
+ここまでの作業で、Azure App Service に環境変数が設定されました。
+
+なお、Bicep を使用すると、既存の環境変数が全て上書きされてしまうので、既存の環境変数に設定を追加する場合は、Azure Portal の UI や 以下のコマンドを使用してください。
+
+```
+az webapp config appsettings set \
+  --name <app-service-name> \
+  --resource-group <rg-name> \
+  --settings MY_ENV_VAR=value
+```
+
+<br>
+
+## 2. Azure App Service へのアプリケーションのデプロイ
+
+Azure App Service へのアプリケーションのデプロイは、さまざまな方法で行えますがここでは Visual Studio Code の Azure Tools　拡張機能パックを使用して行います。
+
+作業に入る前に以下のリンクより、Visual Studio Code の Azure Tools 拡張機能パックをインストールしてください。
+
+* [**Azure Tools 拡張機能パック**](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack)
+
+その他、以下の方法でも Azure App Service へのデプロイが可能ですので、以下のいずれかの方法でデプロイを行っても問題ありません。
+
+* [ZIP または WAR を使用する](https://learn.microsoft.com/ja-jp/azure/app-service/deploy-zip?tabs=cli)
+* [FTP/S を使用した Azure App Service へのアプリのデプロイ](https://learn.microsoft.com/ja-jp/azure/app-service/deploy-ftp?tabs=portal)
+* [Azure App Service への継続的デプロイを構成する](https://learn.microsoft.com/ja-jp/azure/app-service/deploy-continuous-deployment?tabs=github%2Cgithubactions)
+* [Git をローカルで使用して Azure App Service にデプロイする](https://learn.microsoft.com/ja-jp/azure/app-service/deploy-local-git?tabs=cli)
+* [Azure Pipelines を使用して Azure App Service にデプロイする](https://learn.microsoft.com/ja-jp/azure/app-service/deploy-azure-pipelines?tabs=yaml)
+* [GitHub Actions を使用した App Service へのデプロイ](https://learn.microsoft.com/ja-jp/azure/app-service/deploy-github-actions?tabs=openid%2Caspnetcore)
+
+なお、GitHub Actions を使用した CI/CD 環境の構築は、このハンズオンの演習でも実施します。
+
+### Visual Studio Code を使用した Azure App Service へのアプリケーションのデプロイ
+
+Visual Studio Code と Azure Tools 拡張機能パックを使用して Azure App Service へのアプリケーションのデプロイを行います。
+
+具体的な手順は以下のとおりです。
+
+\[**手順**\]
+
+1. Visual Studio Code で演習用アプリケーションのソースコードを開き、Visual Studio Code の左側のメニュー バーから Azure のアイコンをクリックします
+
+    はじめて Azure 拡張機能を使用する場合は、メニュー バーの右隣のツリーより \[**Sign in Azure**\] をクリックします
+
+    ![Azure Icon](./images/VSCode_Azure_SignIn.png)
+
+    メッセージ ボックスに `The extension 'Azure Resources' wants to sign in using Microsoft.` と表示されるので \[**Allow**\] ボタンをクリックすると Web ブラウザーが起動し認証が行われ、認証が完了すると Visual Studio Code に Azure サブスクリプションの一覧が表示されます。
+
+2. サブスクリプションのアイコンをクリックすると、Azure リソースのアイコンの一覧が表示されるので、\[**App Service**\] をクリックして展開し、表示された App Service の一覧から今回の準備作業で作成した Azure App Service を右クリックして \[**Deploy to Web App**\] を選択します。
+
+    ![Azure App Service](./images/VSCode_Deploy_AppService.png)
+
+3. デプロイするプロジェクトのフォルダーを選択するように求められるので、演習用アプリケーションのソースコードが格納されているフォルダーを選択します。
+
+    ![Azure App Service Deploy](./images/VSCode_Azure_DeployFolder.png)
+
+    "(App Service 名)にデプロイしますか? 以前のデプロイは上書きされ、取り消すことはできません。" というメッセージが表示されるので、\[**Deploy**\] ボタンをクリックします。
+
+4. デプロイが開始され、デプロイの進捗状況が Visual Studio Code の下部に表示されます。
+5. 
+    デプロイが完了すると、以下のようなメッセージが表示されるので \[**Browse  Website**\] ボタンをクリックします。
+
+    ![アプリケーションの表示](./images/VSCode_App_Deployed.png)
+
+    もし、メッセージ ボックスが消えてしまった場合は、Visual Studio Code の Azute Tools 拡張のツリービューより目的の Azure App Service のアイコンを右クリックし、表示されたコンテキス メニューから \[**Browse Website**\] を選択します。
+
+    ![アプリケーションの表示](images/VSCode_App_Browsepng.png)
+
+6. ブラウザーが起動し、Azure App Service にデプロイした演習用アプリケーションが表示されます。
+
+    ![Azure App Service Browser](./images/App_Hosted_Azure.png)
+
+    これで Azure App Service への演習用アプリケーションのデプロイが完了しました。
+
+    ブラウザーの URL を確認すると、`https://<App Service 名>.azurewebsites.net` のような形式になっていることが確認できます。

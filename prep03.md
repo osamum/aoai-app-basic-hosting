@@ -228,6 +228,6 @@ Azure Blob コンテナーにアップロードしたドキュメントを Azure
 
 ---
 
-👈　[準備 1 : Azure リソースの作成](prep01.md)
+👈　[準備 2 : 演習用アプリケーションの入手と実行](prep02.md)
 
 🏚️　[README に戻る](README.md)

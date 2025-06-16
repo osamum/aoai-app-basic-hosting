@@ -77,7 +77,7 @@ Bicep 使用して Azure リソースを自動作成する場合の手順は以�
 1. 以下の Bicep ファイルをダウンロードします。
    - [prep-az-resource.bicep](./assets/prep-az-resource.bicep)
   
-2. Azure ポータルにログインし、画面右上にある Cloud Shell アイコンをクリックして Cloud Shell 画面を開きます
+2. [Azure ポータル](https://portal.azure.com)にログインし、画面右上にある Cloud Shell アイコンをクリックして Cloud Shell 画面を開きます
 
     ![Cloud Shell](./images/cloudShell_menu.png)
    
@@ -109,7 +109,7 @@ Bicep 使用して Azure リソースを自動作成する場合の手順は以�
 
     この Bicep ファイルは作成する各リソースにタイムスタンプを付与したユニークな名前を付けてリソースを作成します。
 
-    デプロイが完了するまでしばらく時間がかかるので、しばらく待ちます(※)。
+    デプロイが完了するまで時間がかかるので、しばらく待ちます(※)。
 
     (※) デプロイ時間はタイミングによって異なりますが、通常は 3 ～ 10 分程度で完了します。
 
