@@ -119,15 +119,13 @@ MCP AZ-900 の内容については以下をご覧ください。
  4. [演習 4 :  Azure サービス間の認証設定](Ex04.md)
     1. [演習 4-1 : Key Vault へのキーの登録と利用](Ex04-1.md)
     2. [マネージド ID によるサービス間認証](Ex04-2.md)
-5. サービスの閉域化
-   1. [OpenAI サービスの閉域化設定](Ex05-1.md)
-   2. [AI Search サービスの閉域化設定](Ex05-2.md)
-   3. [App Service からの閉域化されたサービスへのアクセス](Ex05-3.md)
-6. Application Gateway を介した Web アプリケーションの公開
-    1. Application Gateway の作成
-    2. Application Gateway の設定
-    3. Application Gateway を介した Web アプリケーションの公開
-    4. DDoS Protection の有効化
+5. [演習 5 : サービスの閉域化](Ex05.md)
+   1. [演習 5-1 : OpenAI サービスの閉域化設定](Ex05-1.md)
+   2. [演習 5-2 : AI Search の閉域化設定](Ex05-2.md)
+   3. [演習 5-3 : App Service からの閉域化されたサービスへのアクセス](Ex05-3.md)
+6. [演習 6 : パブリック ネットワーク向けのエンドポイントの公開](Ex06.md)
+    1. [演習 6-1-E : Application Gateway を介したアプリケーションの公開(HTTP)](Ex06-1e.md)
+    2. 演習 6-1 : Application Gateway を介したアプリケーションの公開(HTTPS)(※作成中)
  7. オプション : Azure API Management Service を介した Azure OpenAI サービスの利用 
     1. Azure API Management Service のデプロイ
     2. Azure OpenAI サービスの API の登録
