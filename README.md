@@ -32,20 +32,25 @@ MCP AZ-900 の内容については以下をご覧ください。
 
 このハンズオンでは、以下のアカウントとツール類が必要となります。
 
-アカウント
+* アカウント
 
-* [**Microsoft Azure** アカウント](https://learn.microsoft.com/ja-jp/dotnet/azure/create-azure-account)
-* [**GitHub** アカウント](https://github.com/signup)
-* [**Visual Studio Code**](https://code.visualstudio.com/)
+  * [**Microsoft Azure** アカウント](https://learn.microsoft.com/ja-jp/dotnet/azure/create-azure-account)
+  * [**GitHub** アカウント](https://github.com/signup)
+  
+* ツール
+
+  * [**Visual Studio Code**](https://code.visualstudio.com/)
     * [Azure Tools 拡張機能パック](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack)
-* [**Node.js**](https://nodejs.org/ja/)
-* [**Git ツール**](https://git-scm.com/downloads)
+  * [**Node.js**](https://nodejs.org/ja/)
+  * [**Git ツール**](https://git-scm.com/downloads)
   
    (※) GitHub リポジトリから zip 形式でのダウンロードの方法をご存じの場合は、Git ツールがなくても一部の演習をスキップしてハンズオンを実施することができます。
 
 <br>
 
 ## 演習
+
+[はじめに](intro.md)
 
 1. [Azure リソースの作成とアプリケーションのデプロイ](Ex01.md)
    1. [Azure リソースの作成](Ex01-1.md)

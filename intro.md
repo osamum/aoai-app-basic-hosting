@@ -64,7 +64,7 @@
     | リソースグループ | `AOAI-AppEnv-handson` |
     | 名前 | `botApp-(ユニークな値)` |
     | 公開 | コード |
-    | ランタイムスタック | Node 22 TLS|
+    | ランタイムスタック | Node 22 LTS|
     | オペレーティング システム | Linux |
     | リージョン | `Japan East` |
     | 価格プラン | B1 |
