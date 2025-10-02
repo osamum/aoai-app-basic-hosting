@@ -52,13 +52,13 @@
 
 各リソースの作成直後の設定値は以下の通りです。
 
-* **リソースグループ** (※これはコマンドで手動で作成します)
+* 🗂️ **リソースグループ** (※これはコマンドで手動で作成します)
     | 項目 | 値 |
     |----|---|
     | リソースグループ名 | `AOAI-AppEnv-handson` |
     | リージョン | `Japan East` |
 
-* **Azure App Service**
+* 🌐 **Azure App Service**
     | 項目 | 値 |
     |----|----|
     | リソースグループ | `AOAI-AppEnv-handson` |
@@ -71,7 +71,7 @@
 
     その他の設定は既定のまま
 
-* **Azure Storage Account**
+* 🛢️ **Azure Storage Account**
     | 項目 | 値 |
     |----|----|
     | リソースグループ | `AOAI-AppEnv-handson` |
@@ -88,7 +88,7 @@
 
     その他の設定は既定のまま
 
-* **Azure AI Search**
+* 🔍  **Azure AI Search**
     | 項目 | 値 |
     |----|----|
     | リソースグループ | `AOAI-AppEnv-handson` |
@@ -98,7 +98,7 @@
 
     その他の設定は既定のまま
 
-* **Azure OpenAI Service**
+* 🧠 **Azure OpenAI Service**
     | 項目 | 値 |
     |----|----|
     | リソースグループ | `AOAI-AppEnv-handson` |
