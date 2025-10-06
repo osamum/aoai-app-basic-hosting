@@ -135,7 +135,8 @@
   * [**GitHub** アカウント](https://github.com/signup)
   
 * ツール
-
+  * BASH
+    * Windows をお使いの方: [WSL を使用して Windows に Linux をインストールする方法](https://learn.microsoft.com/ja-jp/windows/wsl/install)
   * [**Visual Studio Code**](https://code.visualstudio.com/)
     * [Azure Tools 拡張機能パック](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack)
   * [**Node.js**](https://nodejs.org/ja/)
