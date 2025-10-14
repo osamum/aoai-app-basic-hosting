@@ -102,6 +102,12 @@ MCP AZ-900 の内容については以下をご覧ください。
    
 <br>
   
+## 演習完了後の次のステップ
+
+* [**Azure プロジェクトの CI/CD デプロイのための DevOps ランディングゾーン**](https://github.com/Azure/DevOps-Landing-Zone/blob/main/README.ja.md)
+
+   Terraform と CI/CD ワークフローを使用して Azure リソースをデプロイおよび管理するための、包括的なモジュール型の Infrastructure as Code ソリューションを提供します。Azure DevOps と GitHub ベースの CI/CD ワークフローの両方をサポートするように設計されており、組織は Git でバージョン管理された Infrastructure as Code を使用して、安全でスケーラブル、かつポリシーに準拠したクラウド環境のプロビジョニングを自動化できます。
+
    ---
 
 ## LICENSE
