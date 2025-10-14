@@ -92,11 +92,13 @@ MCP AZ-900 の内容については以下をご覧ください。
     1. [演習 6-1-E : Application Gateway を介したアプリケーションの公開(HTTP)](Ex06-1e.md)
     2. 演習 6-1 : Application Gateway を介したアプリケーションの公開(HTTPS)(※作成中)
     3. [演習 6-2 : セキュリティ設定の追加](Ex06-2.md)
-      
- 7. オプション : Azure API Management Service を介した Azure OpenAI サービスの利用 
-    1. Azure API Management Service のデプロイ
-    2. Azure OpenAI サービスの API の登録
-    3. ルール設定
+
+### 今後追加予定の演習
+
+* オプション : Azure API Management Service を介した Azure OpenAI サービスの利用 
+   1. Azure API Management Service のデプロイ
+   2. Azure OpenAI サービスの API の登録
+   3. ルール設定
    
 <br>
   
