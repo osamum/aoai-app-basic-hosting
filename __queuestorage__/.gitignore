@@ -1,0 +1,4 @@
+# Azurite (Azure Storage Emulator)
+__azurite_db_*.json
+__blobstorage__/
+__queuestorage__/
