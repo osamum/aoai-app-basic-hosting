@@ -1,18 +1,28 @@
 @description('リソースをデプロイするリージョン（通常リソース）')
-param location string = 'Japan East'
+param location string = 'Japan West'
 
 @description('Azure OpenAI をデプロイするリージョン')
 param aoaiLocation string = 'East US'
 
-@description('作成するリソースに付加するランダムな値')
-param randomString  string = utcNow()
+@description('デプロイ日時（省略時は自動生成）')
+param deploymentTimestamp string = utcNow('yyyyMMddHHmm')
 
-var uniqueSuffix = toLower(randomString)
+// タイムスタンプ + 短いハッシュで一意性を保証
+var uniqueSuffix = toLower('${deploymentTimestamp}-${take(uniqueString(deploymentTimestamp), 4)}')
+// ストレージアカウント用（ハイフン不可のため）
+var storageUniqueSuffix = toLower('${deploymentTimestamp}${take(uniqueString(deploymentTimestamp), 4)}')
+
+// 共通タグ
+var commonTags = {
+  deployedAt: deploymentTimestamp
+  environment: 'workshop'
+}
 
 // App Service プラン
 resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
   name: 'plan-${uniqueSuffix}'
   location: location
+  tags: commonTags
   sku: {
     name: 'B1'
     tier: 'Basic'
@@ -27,6 +37,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2024-04-01' = {
 resource appService 'Microsoft.Web/sites@2024-04-01' = {
   name: 'botApp-${uniqueSuffix}'
   location: location
+  tags: commonTags
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
@@ -36,9 +47,10 @@ resource appService 'Microsoft.Web/sites@2024-04-01' = {
 }
 
 // Azure Cognitive Search
-resource searchService 'Microsoft.Search/searchServices@2020-08-01' = {
+resource searchService 'Microsoft.Search/searchServices@2023-11-01' = {
   name: 'aisearch-${uniqueSuffix}'
   location: location
+  tags: commonTags
   sku: {
     name: 'standard'
   }
@@ -50,8 +62,9 @@ resource searchService 'Microsoft.Search/searchServices@2020-08-01' = {
 
 // Storage Account（小文字・ハイフンなし制限）
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: 'storage${uniqueSuffix}'
+  name: take('st${storageUniqueSuffix}', 24)
   location: location
+  tags: commonTags
   sku: {
     name: 'Standard_LRS'
   }
@@ -61,7 +74,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
 
 // Blob コンテナー rag-data-store
 resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01' = {
-  name: 'storage${uniqueSuffix}/default/rag-data-store'
+  name: '${storageAccount.name}/default/rag-data-store'
   properties: {}
   dependsOn: [
     storageAccount
@@ -69,9 +82,10 @@ resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/container
 }
 
 // Azure OpenAI アカウント
-resource aoai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
+resource aoai 'Microsoft.CognitiveServices/accounts@2025-10-01-preview' = {
   name: 'aoai-${uniqueSuffix}'
   location: aoaiLocation
+  tags: commonTags
   sku: {
     name: 'S0'
   }
@@ -82,45 +96,37 @@ resource aoai 'Microsoft.CognitiveServices/accounts@2023-05-01' = {
 }
 
 
-resource gpt4oMini 'Microsoft.CognitiveServices/accounts/deployments@2025-04-01-preview' = {
-  name: 'gpt-4o-mini'
+resource gpt5chat 'Microsoft.CognitiveServices/accounts/deployments@2025-10-01-preview' = {
+  name: 'gpt-5-chat'
   parent: aoai
+  sku: {
+    name: 'GlobalStandard'
+    capacity: 150
+  }
   dependsOn: [
     aoai
   ]
   properties: {
     model: {
-      name: 'gpt-4o-mini'
+      name: 'gpt-5-chat'
+      version: '2025-10-03'
       format: 'OpenAI'
     }
+    versionUpgradeOption: 'OnceNewDefaultVersionAvailable'
+    raiPolicyName: 'Microsoft.DefaultV2'
   }
 }
 
-resource embeddingAda002 'Microsoft.CognitiveServices/accounts/deployments@2025-04-01-preview' = {
-  name: 'text-embedding-ada-002'
+resource embedding3small 'Microsoft.CognitiveServices/accounts/deployments@2025-10-01-preview' = {
+  name: 'text-embedding-3-small'
   parent: aoai
   dependsOn: [
-    gpt4oMini
+    gpt5chat
   ]
   properties: {
     model: {
-      name: 'text-embedding-ada-002'
-      version: '2'
-      format: 'OpenAI'
-    }
-  }
-}
-
-resource dalle3 'Microsoft.CognitiveServices/accounts/deployments@2025-04-01-preview' = {
-  name: 'dall-e-3'
-  parent: aoai
-  dependsOn: [
-    embeddingAda002
-  ]
-  properties: {
-    model: {
-      name: 'dall-e-3'
-      version: '3.0'
+      name: 'text-embedding-3-small'
+      version: '1'
       format: 'OpenAI'
     }
   }

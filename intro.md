@@ -4,7 +4,7 @@
 
 このハンズオンを通じて、Azure OpenAI サービスを利用するアプリケーションをホストするための基本的な設定と運用に必要な知識を習得できます。
 
-演習で構築するシステム構成は、 [Azure ランディング ゾーンでの Azure OpenAI チャット ベースライン アーキテクチャ](https://learn.microsoft.com/ja-jp/azure/architecture/ai-ml/architecture/baseline-azure-ai-foundry-chat) と [Azure でホストされる Web アプリケーションのベースライン](https://learn.microsoft.com/ja-jp/azure/architecture/web-apps/app-service/architectures/baseline-zone-redundant)を元にし、かつ、ログや監視、バックアップ、Production/Staging 環境(デプロイスロット)、セキュリティなどの運用に必要な設定を含むように一部変更を加えています。
+演習で構築するシステム構成は、 [ベースライン Microsoft Foundry チャット参照アーキテクチャ](https://learn.microsoft.com/ja-jp/azure/architecture/ai-ml/architecture/baseline-azure-ai-foundry-chat) と [ベースラインの高可用性ゾーン冗長構成のWebアプリケーション](https://learn.microsoft.com/ja-jp/azure/architecture/web-apps/app-service/architectures/baseline-zone-redundant)を元にし、かつ、ログや監視、バックアップ、Production/Staging 環境(デプロイスロット)、セキュリティなどの運用に必要な設定を含むように一部変更を加えています。
 
 今回のハンズオンで最終的に構築されるシステム構成図は以下のようになります。
 
@@ -24,10 +24,10 @@
   - 指定された GitHub アカウントの情報取得
 * RAG (Retrieval Augmented Generation)
   - Azure AI Search サービスを利用したドキュメント検索
-* 画像生成
-* 画像認識
+* ~~画像生成~~(DALL-E-3 モデルがリタイアのため、画像生成の機能は演習用アプリケーションから削除されました)
+* URL 指定による画像認識
 
-![ハンズオンで使用するアプリケーションの画面](images/handson_chottoGPT.png)
+![ハンズオンで使用するアプリケーションの画面](images/handson_chottoGPT2.png)
 
 なお、このアプリケーションは以下のハンズオンで作成する演習用アプリケーションに Web の UI を追加したものです。
 
@@ -44,9 +44,8 @@
 * [**Azure Storage Account**](https://learn.microsoft.com/ja-jp/azure/storage/common/storage-account-overview)
 * [**Azure AI Search**](https://learn.microsoft.com/ja-jp/azure/search/search-what-is-azure-search)
 * [**Azure OpenAI Service**](https://learn.microsoft.com/ja-jp/azure/ai-foundry/openai/overview)
-  - gpt-4o-mini (テキスト生成)
-  - dall-e-3 (画像生成)
-  - text-embedding-ada-002 (埋め込み)
+  - gpt-5-chat (テキスト生成)
+  - text-embedding-3-small (埋め込み)
 
 リソースグループ以外の Azure リソースは [Bicep](https://learn.microsoft.com/ja-jp/azure/azure-resource-manager/bicep/overview?tabs=bicep) ファイルを使用して自動的に作成されます。
 
@@ -56,7 +55,7 @@
     | 項目 | 値 |
     |----|---|
     | リソースグループ名 | `AOAI-AppEnv-handson` |
-    | リージョン | `Japan East` |
+    | リージョン | `Japan West` |
 
 * 🌐 **Azure App Service**
     | 項目 | 値 |
@@ -66,7 +65,7 @@
     | 公開 | コード |
     | ランタイムスタック | Node 22 LTS|
     | オペレーティング システム | Linux |
-    | リージョン | `Japan East` |
+    | リージョン | `Japan West` |
     | 価格プラン | B1 |
 
     その他の設定は既定のまま
@@ -76,7 +75,7 @@
     |----|----|
     | リソースグループ | `AOAI-AppEnv-handson` |
     | ストレージ アカウント名 | `storage-(ユニークな値)` |
-    | リージョン | `Japan East` |
+    | リージョン | `Japan West` |
     | パフォーマンス | Standard |
     | アカウントの種類 | StorageV2 (汎用 v2) |
     | 冗長性 | LRS |
@@ -88,15 +87,22 @@
 
     その他の設定は既定のまま
 
+    Azure ポータルから手動で作成する手順は以下のドキュメントの内容を参考にしてください:
+    * [Azure Storage アカウントの作成](https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex02-3.md#%E6%BA%96%E5%82%99-1--azure-storage-%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%81%AE%E4%BD%9C%E6%88%90)
+
 * 🔍  **Azure AI Search**
     | 項目 | 値 |
     |----|----|
     | リソースグループ | `AOAI-AppEnv-handson` |
     | 名前 | `aisearch-(ユニークな値)` |
-    | リージョン | `Japan East` |
+    | リージョン | `Japan West` |
     | 価格レベル | Standard  |
 
     その他の設定は既定のまま
+
+    Azure ポータルから手動で作成する手順は以下のドキュメントの内容を参考にしてください:
+
+    * [Azure AI Search サービスの作成](https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex02-3.md#%E6%BA%96%E5%82%99-2--azure-ai-search-%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90)
 
 * 🧠 **Azure OpenAI Service**
     | 項目 | 値 |
@@ -109,9 +115,11 @@
     * **デプロイされる AI モデル**
         | モデル | 種類 | 用途 |
         |----|---|---|
-        | gpt-4o-mini | テキスト生成 | 会話 |
-        | dall-e-3 | 画像生成 | 画像の生成 |
-        | text-embedding-ada-002 | 埋め込み | 検索ワードのベクトル化 |
+        | gpt-5-chat | テキスト生成 | 会話 |
+        | text-embedding-3-small | 埋め込み | 検索ワードのベクトル化 |
+
+    Azure ポータルから手動で作成する手順は以下のドキュメントの内容を参考にしてください:
+    * [Azure ポータルから Open AI リソースを作成](https://github.com/osamum/AOAI-first-step-for-Developer/blob/main/Ex01-1.md#%E6%BC%94%E7%BF%92-1-1---azure-%E3%83%9D%E3%83%BC%E3%82%BF%E3%83%AB%E3%81%8B%E3%82%89-open-ai-%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%92%E4%BD%9C%E6%88%90)
 
 その他、演習の手順で以下のリソースを作成します。
 
