@@ -15,6 +15,9 @@
      * [2. App Service への診断設定の追加](Ex03-3-2.md#2-app-service-%E3%81%B8%E3%81%AE%E8%A8%BA%E6%96%AD%E8%A8%AD%E5%AE%9A%E3%81%AE%E8%BF%BD%E5%8A%A0)
      * [3. Azure OpenAI サービスへの診断設定の追加](Ex03-3-2.md#3-azure-openai-%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9%E3%81%B8%E3%81%AE%E8%A8%BA%E6%96%AD%E8%A8%AD%E5%AE%9A%E3%81%AE%E8%BF%BD%E5%8A%A0)
    * 演習 5-2 : AI Search の閉域化設定 - [仮想ネットワークのピアリング設定](Ex05-2.md#4--%E4%BB%AE%E6%83%B3%E3%83%8D%E3%83%83%E3%83%88%E3%83%AF%E3%83%BC%E3%82%AF%E3%81%AE%E3%83%94%E3%82%A2%E3%83%AA%E3%83%B3%E3%82%B0%E8%A8%AD%E5%AE%9A)
+* Key Vault へのアクセスに関するトラブルシューティングの内容について、以下の内容を追加
+   * [キー コンテナー管理者 ロールの割り当て](wkard-keyVault-roll.md#%E3%82%AD%E3%83%BC-%E3%82%B3%E3%83%B3%E3%83%86%E3%83%8A%E3%83%BC%E7%AE%A1%E7%90%86%E8%80%85-%E3%83%AD%E3%83%BC%E3%83%AB%E3%81%AE%E5%89%B2%E3%82%8A%E5%BD%93%E3%81%A6)
+   
  
 ## 2026 年 1 月 5 日
 
